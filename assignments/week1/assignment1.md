@@ -2,7 +2,7 @@
 ##  Week 1 assignments: _8/30/19 - 9/6/19_ 
 
 - __Data__: Find at least one dataset to work with that does not come from the book's R package. 
-- __Reading__: Read Chapter 1 and Section 2.2 in _ISL_
+- __Reading__: Read Chapters 1 and 2 in _ISL_
 - __Assignment__: Create a new directory for "assignment-submissions" and a directory within that directory named "week1". Within "assignment-submissions/week1", create a `.Rmd` file for the `R` portion of this assignment (e.g., same structure as "assignments/week1/assignment1.md). For the `Python` portion you can just push up a commented script. Once you are finished with the assignment notify me that you have made your final commit. 
 
     1. Write out two research questions that could be addressed using your dataset(s).  

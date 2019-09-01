@@ -1,0 +1,63 @@
+---
+title: "Assignment 1"
+author: "Conner McCloney"
+output: pdf_document
+---
+# 1
+
+## a)
+
+A research question that could be addressed with regression. Create a plot similar to Figure 1.1 in ISL to display the data relevant to your research question.
+
+Can we predict the average rating of a book from Goodreads?
+
+Source: [https://www.kaggle.com/jealousleopard/goodreadsbooks]
+
+```{r}
+books_data <- read.csv("books.csv")
+par(mfrow=c(1,2))
+plot(as.numeric(as.character(average_rating))~as.numeric(ratings_count),data=books_data, ylab="Average Rating", xlab="Number of Ratings")
+plot(as.numeric(as.character(average_rating))~as.numeric(text_reviews_count),data=books_data, ylab="Average Rating", xlab="Number of Text Reviews")
+par(mfrow=c(1,2))
+plot(as.numeric(as.character(average_rating))~as.numeric(X..num_pages),data=books_data, ylab="Average Rating", xlab="Number of Pages")
+plot(as.numeric(as.character(average_rating))~language_code,data=books_data, ylab="Average Rating", xlab="Language Code")
+```
+
+## b)
+
+A research question that could be addressed with classification. Create a plot similar to Figure 1.2 in ISL to display the data relevant to your research question.
+
+Is there a relationship between the dispersion measure signal-to-noise ratio (DM-SNR) curve and the classification of an observed measurement as a pulsar or a false positive?
+
+Source: [https://www.kaggle.com/pavanraj159/predicting-a-pulsar-star]
+
+```{r}
+pulsar_data <- read.csv("pulsar_stars.csv")
+pulsar_data$target_class[pulsar_data$target_class==1] <- "Pulsar"
+pulsar_data$target_class[pulsar_data$target_class==0] <- "False Positive"
+par(mfrow=c(1,2))
+boxplot(Mean.of.the.DM.SNR.curve~target_class,data=pulsar_data,ylab="Mean of DM-SNR curve", xlab="Target Reading")
+boxplot(Standard.deviation.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="SD of DM-SNR curve", xlab="Target Reading")
+par(mfrow=c(1,2))
+boxplot(Excess.kurtosis.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Excess kurtosis of DM-SNR curve", xlab="Target Reading")
+boxplot(Skewness.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Skewness of DM-SNR curve", xlab="Target Reading")
+```
+
+# 2
+
+The book distinguishes between prediction and inference, but I would argue that both are forms of inference - one is predictive and one is explanatory. Explain, in your own words the difference between these two inferential objectives.
+
+The difference between predictive inference and explanatory inference, is that in predictive inference our main or primary objective or goal is to create a model that can predict a response $y$ given the values for our predictor variables $x$ as accurately as possible. Whereas for explanatory inference, our primary objective is in determining and understanding the relationship between the predictor variables and the response. For predictive inference, we are less interested in understanding this relationship and more interested in being able to accurately predict the response value for future observations, whereas for explanatory inference, our goal is the reverse. Due to this, explanatory inferential models tend to be less complex than predictive inferential models, because they are easier to understand and use to explain the relationship, if it is present.
+
+# 3
+
+Discuss differences and similarities between parametric and non-parametric approaches to estimating $f$.
+
+Parametric approaches start with an assumption of the shape or form of $f$, so that the problem of estimating $f$ can be reduced to estimating a set of parameters that $f$ is now comprised of, based on the shape or form assumed. For non-parametric approaches however, no explicit assumption is made, and the goal is to estimate $f$ as accurately as possible, subject to the fit being smooth. This approach can be more accurate, but needs more observations than a parametric approach, and tends to generate a more complex model. Due to this, parametric approaches are better suited for explanatory inference, because the assumption of the shape of $f$ tends to reduce the complexity of the model, making the relationship easier to understand and describe. 
+
+# 4
+
+In your own words, explain the difference between supervised and unsupervised learning.
+
+Supervised learning is using statistical learning methods to build a model that attempts to predict the response or output variable based on one or more input or predictor variables. Unsupervised learning has one or more input variables, but lacks any supervisory output variable, and instead seeks to describe and understand the relationship between these input variables, using grouping or some other method. There can also be a situation, where some observations contain a response value, while other observations don't, which is a semi-supervised learning problem.
+

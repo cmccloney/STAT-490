@@ -16,11 +16,9 @@ Source: [https://www.kaggle.com/jealousleopard/goodreadsbooks]
 ```{r}
 books_data <- read.csv("books.csv")
 par(mfrow=c(1,2))
-plot(as.numeric(as.character(average_rating))~as.numeric(ratings_count),data=books_data, ylab="Average Rating", xlab="Number of Ratings")
-plot(as.numeric(as.character(average_rating))~as.numeric(text_reviews_count),data=books_data, ylab="Average Rating", xlab="Number of Text Reviews")
-par(mfrow=c(1,2))
-plot(as.numeric(as.character(average_rating))~as.numeric(X..num_pages),data=books_data, ylab="Average Rating", xlab="Number of Pages")
-plot(as.numeric(as.character(average_rating))~language_code,data=books_data, ylab="Average Rating", xlab="Language Code")
+plot(as.numeric(as.character(average_rating))~as.numeric(as.character(ratings_count)),data=books_data, ylab="Average Rating", xlab="Number of Ratings", col="red")
+plot(as.numeric(as.character(average_rating))~as.numeric(as.character(text_reviews_count)),data=books_data, ylab="Average Rating", xlab="Number of Text Reviews", col="red")
+plot(as.numeric(as.character(average_rating))~as.numeric(as.character(X..num_pages)),data=books_data, ylab="Average Rating", xlab="Number of Pages", col="red")
 ```
 
 ## b)
@@ -36,11 +34,11 @@ pulsar_data <- read.csv("pulsar_stars.csv")
 pulsar_data$target_class[pulsar_data$target_class==1] <- "Pulsar"
 pulsar_data$target_class[pulsar_data$target_class==0] <- "False Positive"
 par(mfrow=c(1,2))
-boxplot(Mean.of.the.DM.SNR.curve~target_class,data=pulsar_data,ylab="Mean of DM-SNR curve", xlab="Target Reading")
-boxplot(Standard.deviation.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="SD of DM-SNR curve", xlab="Target Reading")
+boxplot(Mean.of.the.DM.SNR.curve~target_class,data=pulsar_data,ylab="Mean of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Standard.deviation.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="SD of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
 par(mfrow=c(1,2))
-boxplot(Excess.kurtosis.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Excess kurtosis of DM-SNR curve", xlab="Target Reading")
-boxplot(Skewness.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Skewness of DM-SNR curve", xlab="Target Reading")
+boxplot(Excess.kurtosis.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Excess kurtosis of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Skewness.of.the.DM.SNR.curve~target_class,data=pulsar_data, ylab="Skewness of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
 ```
 
 # 2

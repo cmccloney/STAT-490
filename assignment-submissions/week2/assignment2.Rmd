@@ -192,3 +192,16 @@ LoadLibraries()
 write.csv(Boston,"Boston.csv")
 write.csv(Carseats,"Carseats.csv")
 ```
+
+
+
+```{r}
+lm.fit=lm(as.numeric(average_rating)~ratings_count,data=books_data)
+summary(lm.fit)
+lm.fit2=lm(as.numeric(average_rating)~ratings_count*text_reviews_count,data=books_data)
+summary(lm.fit2)
+lm.fit3=lm(as.numeric(average_rating)~ratings_count*+I(ratings_count^2),data=books_data)
+summary(lm.fit3)
+par(mfrow=c(2,2))
+plot(lm.fit3)
+```

@@ -1,0 +1,54 @@
+---
+title: "Ch 4 Lab"
+author: "Conner McCloney"
+output: word_document
+---
+
+The model below can be written as $log(\frac{p(Pulsar)}{1-p(Pulsar)})$ = $\beta_0$ + $\beta_1$ Mean.of.the.integrated.profile +$\beta_2$
+SD.of.the.integrated.profile + $\beta_3$ Excess.kurtosis.of.the.integrated.profile + $\beta_4$Skewness.of.the.integrated.profile + $\beta_5$
+Mean.of.the.DM.SNR.curve + $\beta_6$ SD.of.the.DM.SNR.curve + $\beta_7$ Excess.kurtosis.of.the.DM.SNR.curve + $\beta_8$ Skewness.of.the.DM.SNR.curve
+
+```{r}
+pulsar_data <- read.csv("pulsar_stars.csv")
+names(pulsar_data)
+dim(pulsar_data)
+summary(pulsar_data)
+pairs(pulsar_data)
+cor(pulsar_data)
+```
+
+```{r}
+glm.fits=glm(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial )
+summary(glm.fits)
+coef(glm.fits)
+#summary(glm.fits)$coef
+glm.probs=predict(glm.fits,type="response")
+glm.probs[1:10]
+pulsar_data$target_class <- factor(pulsar_data$target_class)
+contrasts(pulsar_data$target_class)
+glm.pred=rep("0",17898)
+glm.pred[glm.probs>.5]="1"
+table(glm.pred,pulsar_data$target_class)
+(16173+1357)/17898
+mean(glm.pred==pulsar_data$target_class)
+```
+
+```{r}
+train=(pulsar_data[0:1250,])
+test=pulsar_data[1251:17898,]
+dim(test)
+glm.fits=glm.fits=glm(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=train ,family =binomial )
+glm.probs=predict(glm.fits,test,type="response")
+glm.pred=rep("0",16648)
+glm.pred[glm.probs>.5]="1"
+table(glm.pred,test$target_class)
+(15008+1281)/16648
+mean(glm.pred==test$target_class)
+mean(glm.pred!=test$target_class)
+```

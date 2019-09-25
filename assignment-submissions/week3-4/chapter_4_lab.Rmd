@@ -52,3 +52,39 @@ table(glm.pred,test$target_class)
 mean(glm.pred==test$target_class)
 mean(glm.pred!=test$target_class)
 ```
+
+```{r}
+#LDA
+library(MASS)
+lda.fit=lda(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=train)
+lda.fit
+plot(lda.fit)
+lda.pred=predict(lda.fit,test)
+names(lda.pred)
+lda.class=lda.pred$class
+table(lda.class,test$target_class)
+mean(lda.class==test$target_class)
+sum(lda.pred$posterior[,1]>=.9)
+sum(lda.pred$posterior[,1]<.9)
+```
+
+```{r}
+#QDA
+qda.fit=qda(target_class~Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=train)
+qda.fit
+qda.class=predict(qda.fit,test)$class
+table(qda.class,test$target_class)
+mean(qda.class==test$target_class)
+```
+
+```{r}
+library(class)
+knn.pred=knn(train,test,train$target_class,k=3)
+table(knn.pred,test$target_class)
+```

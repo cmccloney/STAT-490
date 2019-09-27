@@ -1,0 +1,23 @@
+Jupyter installation & tutorial: https://www.datacamp.com/community/tutorials/tutorial-jupyter-notebook
+
+Python:
+
+Installation: https://realpython.com/installing-python/#macos-mac-os-x
+Installing Packages: https://packaging.python.org/tutorials/installing-packages/
+Running Python script: https://www.pythoncentral.io/execute-python-script-file-shell/
+IDLE: https://www.poftut.com/download-install-and-use-python-idle-editor/
+Tutorial/Basics: https://www.tutorialspoint.com/python/index.htm
+Plotting w/ Matplotlib: https://realpython.com/python-matplotlib-guide/
+
+Week 2 material:
+
+Linear Regression: https://realpython.com/linear-regression-in-python/#simple-linear-regression-with-scikit-learn
+Diagnostic Plots: https://robert-alvarez.github.io/2018-06-04-diagnostic_plots/
+Multiple LR: https://blog.datarobot.com/multiple-regression-using-statsmodels
+
+Chapter 4 material:
+
+Logistic Regression: http://blog.yhat.com/posts/logistic-regression-python-rodeo.html
+LDA: https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.LinearDiscriminantAnalysis.html
+QDA: https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html
+KNN: https://pythonspot.com/k-nearest-neighbors/

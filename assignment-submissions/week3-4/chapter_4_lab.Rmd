@@ -18,10 +18,11 @@ cor(pulsar_data)
 ```
 
 ```{r}
-glm.fits=glm(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+glm.fits=glm(target_class ~ Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
                Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
                Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
-               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial )
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,
+             data=pulsar_data, family = binomial )
 summary(glm.fits)
 coef(glm.fits)
 #summary(glm.fits)$coef
@@ -40,7 +41,7 @@ mean(glm.pred==pulsar_data$target_class)
 train=(pulsar_data[0:1250,])
 test=pulsar_data[1251:17898,]
 dim(test)
-glm.fits=glm.fits=glm(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+glm.fits=glm.fits=glm(target_class ~ Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
                Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
                Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
                Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=train ,family =binomial )
@@ -56,7 +57,7 @@ mean(glm.pred!=test$target_class)
 ```{r}
 #LDA
 library(MASS)
-lda.fit=lda(target_class∼Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+lda.fit=lda(target_class ~ Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
                Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
                Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
                Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=train)

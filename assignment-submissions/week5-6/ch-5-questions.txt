@@ -1,0 +1,7 @@
+1. The book states that k-fold CV is more accurate than LOOCV. Why is that? How would you determine the value of k for which k-fold CV is the most accurate?
+2. What if you calculated the test MSE for every possible layout of k-fold CV, if this were computationally feasible would it improve the accuracy or precision and if so, by how much?
+  What I mean is, if n = 4, and you do 2-fold CV, you would need to repeat the 2-fold CV process 2 times, once for every group of k=2 you could form.
+3. Which approach is the best cross validation approach and why?
+4. For bootstrapping, if computational power and time weren't issues, how accurate and precise could bootstrapping potentially be?
+5. For QDA in chapter 4, could you explain the relationship between the formulas the book gives for QDA and Bayes Theorem?
+6. I forgot to ask, from your paper, you said beta coefficients across models hold the same interpretation only when they're orthogonal. What does that mean? Also, how would you interpret a coefficient after you've averaged it across different models?

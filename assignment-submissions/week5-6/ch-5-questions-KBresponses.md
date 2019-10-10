@@ -19,6 +19,6 @@ _Not sure this is somthing I can do a good job of here, but let's discuss next t
 6. I forgot to ask, from your paper, you said beta coefficients across models hold the same interpretation only when they're orthogonal. What does that mean? Also, how would you interpret a coefficient after you've averaged it across different models?    
 _Orthogonal is a term from linear algebra that is equvalent to "independent" in statistics. Thus, for the regression coefficients to remain the same across all models regardless of which Xs are included in the model, all Xs must be mutually independent. This is something we never observe in practice! RE: how to interpret a MA partial regression coefficient - you've hit the nail on the head! There is no clear interpretation, so if explanatory inferernce is the goal model averaging partial regression coefficients to "account for model uncertatinty" doesn't make much sense. It would be analogous to averaging apples and oranges._
 
-#### Text problems to work through
+#### Chapter 5 text problems to work through
 
 - Problem 2 from the conceptual problems, problem 8 from applied. 

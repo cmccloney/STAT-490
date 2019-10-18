@@ -1,0 +1,133 @@
+---
+title: "Appendix"
+author: "Conner McCloney"
+output: pdf_document
+---
+
+```{r}
+pulsar_data <- read.csv("pulsar_stars.csv")
+```
+
+# Exploratory Plots
+
+```{r}
+pulsar_data$target_class_label[pulsar_data$target_class==1] <- "Pulsar"
+pulsar_data$target_class_label[pulsar_data$target_class==0] <- "False Positive"
+#DM-SNR Curve
+par(mfrow=c(1,2))
+boxplot(Mean.of.the.DM.SNR.curve~target_class_label,data=pulsar_data,ylab="Mean of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Standard.deviation.of.the.DM.SNR.curve~target_class_label,data=pulsar_data, ylab="SD of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+par(mfrow=c(1,2))
+boxplot(Excess.kurtosis.of.the.DM.SNR.curve~target_class_label,data=pulsar_data, ylab="Excess kurtosis of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Skewness.of.the.DM.SNR.curve~target_class_label,data=pulsar_data, ylab="Skewness of DM-SNR curve", xlab="Target Reading", col=c("blue","orange"))
+```
+
+```{r}
+par(mfrow=c(1,2))
+boxplot(Mean.of.the.integrated.profile~target_class_label,data=pulsar_data,ylab="Mean of Integrated Profile", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Standard.deviation.of.the.integrated.profile~target_class_label,data=pulsar_data, ylab="SD of Integrated Profile", xlab="Target Reading", col=c("blue","orange"))
+par(mfrow=c(1,2))
+boxplot(Excess.kurtosis.of.the.integrated.profile~target_class_label,data=pulsar_data, ylab="Excess kurtosis of Integrated Profile", xlab="Target Reading", col=c("blue","orange"))
+boxplot(Skewness.of.the.integrated.profile~target_class_label,data=pulsar_data, ylab="Skewness of Integrated Profile", xlab="Target Reading", col=c("blue","orange"))
+```
+
+# Multicollinearity
+
+```{r}
+suppressMessages(library(car))
+temp <- subset( pulsar_data, select = -c(target_class_label,target_class))
+cor(temp)
+pairs(temp)
+```
+
+# Models
+
+From exploratory plots, all seem useful in detecting difference between False Positive and true Pulsar reading.
+
+```{r}
+full.model <- glm(target_class~Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve+
+               Excess.kurtosis.of.the.DM.SNR.curve+Skewness.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial(link="logit"))
+summary(full.model)
+vif(full.model)
+#p-value based reduction
+reduced.model1 <- glm(target_class~Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Excess.kurtosis.of.the.integrated.profile+Skewness.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial(link="logit"))
+summary(reduced.model1)
+vif(reduced.model1)
+#vif-based reduction
+reduced.model2 <- glm(target_class~Mean.of.the.integrated.profile+Standard.deviation.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial(link="logit"))
+summary(reduced.model2)
+vif(reduced.model2)
+#p-value and vif-based reduction
+reduced.model3 <- glm(target_class~Mean.of.the.integrated.profile+
+               Mean.of.the.DM.SNR.curve+Standard.deviation.of.the.DM.SNR.curve,data=pulsar_data ,family =binomial(link="logit"))
+summary(reduced.model3)
+vif(reduced.model3)
+```
+
+# Model Testing
+
+```{r}
+train=(pulsar_data[0:1250,])
+test=pulsar_data[1251:17898,]
+
+glm.probs.full=predict(full.model,test,type="response")
+glm.pred.full=rep("0",16648)
+glm.pred.full[glm.probs.full>.5]="1"
+table(glm.pred.full,test$target_class,dnn=c("True Label","Predicted Label - Full Model"))
+
+glm.probs.r1=predict(reduced.model1,test,type="response")
+glm.pred.r1=rep("0",16648)
+glm.pred.r1[glm.probs.r1>.5]="1"
+table(glm.pred.r1,test$target_class,dnn=c("True Label","Predicted Label - Reduced Model #1"))
+
+glm.probs.r2=predict(reduced.model2,test,type="response")
+glm.pred.r2=rep("0",16648)
+glm.pred.r2[glm.probs.r2>.5]="1"
+table(glm.pred.r2,test$target_class,dnn=c("True Label","Predicted Label - Reduced Model #2"))
+
+glm.probs.r3=predict(reduced.model3,test,type="response")
+glm.pred.r3=rep("0",16648)
+glm.pred.r3[glm.probs.r3>.5]="1"
+table(glm.pred.r3,test$target_class,dnn=c("True Label","Predicted Label - Reduced Model #3"))
+```
+
+# Diagnostics
+
+```{r}
+suppressMessages(library(arm))
+x <- predict(full.model)
+y <- resid(full.model)
+binnedplot(x,y)
+x <- predict(reduced.model1)
+y <- resid(reduced.model1)
+binnedplot(x,y)
+x <- predict(reduced.model2)
+y <- resid(reduced.model2)
+binnedplot(x,y)
+x <- predict(reduced.model3)
+y <- resid(reduced.model3)
+binnedplot(x,y)
+#All binned plots bad, interactions don't help
+#Binned plots for transformations that seemed to help
+```
+
+
+# K-fold CV
+
+```{r}
+suppressMessages(library(boot))
+pulsar_data <- subset(pulsar_data, select=-target_class_label)
+cv.err.full <- cv.glm(pulsar_data,full.model,K=10)
+cv.err.full$delta
+cv.err.r1 <- cv.glm(pulsar_data,reduced.model1,K=10)
+cv.err.r1$delta
+cv.err.r2 <- cv.glm(pulsar_data,reduced.model2,K=10)
+cv.err.r2$delta
+cv.err.r3 <- cv.glm(pulsar_data,reduced.model3,K=10)
+cv.err.r3$delta
+```

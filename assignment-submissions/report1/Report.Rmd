@@ -37,7 +37,7 @@ electromagnetic radiation, and can only be measured when this beam is aimed
 directly at Earth. These pulsars were searched for using large
 radio telescopes looking for periodic radio signals that a
 pulsar would produce. Many measurements taken that could be a
-pulsar, known as a candidate, are recorded, however in practice
+pulsar, known as a candidate, were recorded, however in practice
 most observations recorded are caused by radio frequency
 interference (RFI) and noise. This data set records the mean, 
 standard deviation, skewness, and excess kurtosis of the 
@@ -59,22 +59,41 @@ classifying a pulsar candidate, and how accurate a model of this sort is.
 From this data set, data for eight variables in total were collected for every observation: the mean, standard deviation, skewness, and excess kurtosis of
 both the DM-SNR curve and the integrated profile. From here, I decided to begin with a 'full' additive model that included each of these variables as a
 predictor variable. To answer the research question defined above, I chose to determine which of these variables had sufficient evidence to keep 
-as predictor variables, and which could be dropped to simplify the model. My technique was to combine a p-value and VIF-based approach, by first 
-determining which of the predictors in the model had large p-values, then dropping these and re-fitting this reduced model. Or, if all p-values were 
-sufficiently small, looking at the VIFs for each of the predictors and removing any explanatory variables with large VIFs, refitting this reduced model, 
+as predictor variables, and which could be dropped to simplify the model. I used a backward selection technique based on VIF and p-values. I first 
+determined which, if any, of the predictors in the model had large p-values, then dropped all variables meeting this criteria, then re-fit this reduced 
+model. Or, if all p-values were sufficiently small, looking at the VIFs for each of the predictors and removing any explanatory variables with large VIFs, 
+refitting this reduced model, 
 and repeating this process. Because these variables are recorded measurements on the same metrics, I would expect to see some form of relationship present 
-between many of the variables, and examining VIFs helps us to find any multicollinearity present in the model.
-Following the procedure outlined, we end up with a model that includes the mean and skewness of the integrated profile, and the mean and standard deviation
-of the DM-SNR curve as our predictors. Examining the binned residual plot for this model, and for the predictors present in this model however, it is clear
-that a pattern is present in the residuals. Including interactions, transformations, and polynomial terms in the models did not fix this issue, therefore I have chosen to proceed with testing using just these simpler additive models. The models and the explanatory variables associated with each is displayed below. The binned residual plots can be found in the Appendix.
+between many of the variables, and examining VIFs helps us to quanitfy the severity of the multicollinearity in the model by measuring how much 
+the variance of a given predictor is increased beacuse of collinearity. With this in mind, terms with high VIFs can be dropped from the model as 
+the infromation of their effect on the response can be explained by other predictors already present in the model.
+Following the procedure outlined, we end up with a model that includes the mean of the integrated profile, and the mean and standard deviation
+of the DM-SNR curve as our predictors. Examining the binned residual plot for this model, shown in Figure 1, and for the predictors present in this model however, it is clear
+that a pattern is present in the residuals. Including interactions, transformations, and polynomial terms in the models did not fix this issue, therefore I have chosen to proceed with testing using just these simpler additive models. The models and the explanatory variables associated with each is displayed below in Table 1, along with the 'full' model expressed in mathematical notation. The binned residual plots can also be found in the Appendix.
+
+$log(\frac{p(X)}{1-p(X)})$ = $\beta_0$ + $\beta_1 * Mean_{IP}$ + $\beta_2 * SD_{IP}$ + $\beta_3 * Excess Kurtosis_{IP}$ + $\beta_4 * Skewness_{IP}$ + $\beta_5 * Mean_{DM-SNR}$ + $\beta_6 * SD_{DM-SNR}$ + $\beta_7 * ExcessKurtosis_{DM-SNR}$ + $\beta_8 * Skewness_{DM-SNR}$
+
+where IP represents the Integrated Profile, DM-SNR the DM-SNR curve, $log(\frac{p(X)}{1-p(X)})$ the log-odds of the classification of a pulsar candidate, and $p(X)$ the probability of a pulsar candidate being classified as a true pulsar.
+
+```{r, echo=FALSE}
+suppressMessages(library(arm))
+x <- predict(reduced.model3)
+y <- resid(reduced.model3)
+par(mfrow=c(2,2))
+binnedplot(x,y,main="Binned plot for->Model #3")
+binnedplot(pulsar_data$Mean.of.the.integrated.profile,y,main="Binned plot for Mean->I.P.")
+binnedplot(pulsar_data$Mean.of.the.DM.SNR.curve,y,main="Binned plot for Mean->Curve")
+binnedplot(pulsar_data$Standard.deviation.of.the.DM.SNR.curve,y,main="Binned plot for SD->Curve")
+```
 
 # Model Testing
 
-Starting from the 'full' model, and refining it down to these four predictors using my technique, generated two more intermediately complex models. I tested 
-these four models, and the reduced model with a squared transformation for predictive ability. The data was split into a training and test set, and the 
+Starting from the 'full' model and refining it down to these four predictors using this technique, generated two more intermediately complex models. I tested 
+these four models for predictive ability. The data was split into a training and test set, and the 
 predictive ability of each model was measured and displayed using a confusion matrix. A row defines the true value of an observation, where '0' represents a False Positive reading of a Pulsar candidate, and '1' a true Pulsar reading. A column represents the predicted value of an observation using that model at a decision rule of 0.5.
 
 ```{r,echo=FALSE}
+suppressMessages(library(xtable))
 train=(pulsar_data[0:1250,])
 test=pulsar_data[1251:17898,]
 
@@ -103,14 +122,14 @@ From these results, we can see that the very best results come from the
 full model with a 97.9% accuracy rate, and the highest error rate 
 belonging to the final reduced model with a 97.1% accuracy rate. However,
 this is only a difference of 0.8%, indicating that the predictor 
-variables present only in the full model were not necessary for accurate 
+variables present only in the first three models were not necessary for accurate 
 classification. Further, all four models have a very small test 
 error rate, indicating that any of these would be very useful
 and accurate in determining the validity of a pulsar candidate.
 
-For comparison, the k-fold Cross Validation technique was also used at a value of $k$=10. This technique will split the data set into $k$ non-overlapping 'folds', with each fold acting as a validation set, with the remainder of the data acting as a training set. $k$ analyses will be run, and the overall test error rate is the average of all $k$ rates. Mathematically, this is represented as,
+For comparison, the k-fold Cross Validation technique was also used at a value of $k$=10. This technique split the data set into $k$ non-overlapping 'folds', with each fold acting as a validation set, with the remainder of the data acting as a training set. Then, $k$ analyses were run, and the overall test error rate was calculated as the average of all $k$ rates. Mathematically, this is represented as,
 
-$CV_{(n)} = \frac{1}{n} \Sigma_{i=1}^n Err_i$
+$CV_{(k)}$ = $\frac{1}{k}$ $\Sigma_{i=1}^k$ $(\Sigma_{j=1}^n$ $\frac{I(y_j \neq \hat{y_j})}{n})$
 
 , where $n = 16,648$. The misclassification rates for each model using this technique are shown below.
 
@@ -129,3 +148,29 @@ cat("Reduced Model 3: ",cv.err.r3$delta[2],"\n")
 Using k-fold Cross Validation, we see misclassification rates that are around 2% for all four models. This, again, is an extremely low test error rate, and seems to be just slightly better than the error rates the logistic regression models tested above generated.
 
 # Conclusion
+
+In the beginning, I defined the research question as determining which of
+the characteristics of the DM-SNR Curve and/or the integrated profile are
+useful in accurately classifying a pulsar candidate, and how accurate a 
+model of this sort is. From the results generated by these tests, the 
+most accurate model was the full model, while the least accurate was the 
+Reduced Model #3, with the fewest predictors. However, the difference in 
+accuracy between these two models was less than 1% in both tests. 
+Referring to the first objective defined in the research question, this 
+small difference seems to suggest that all of the predictors found in the
+first three models are unnecessary given the explanatory variables found 
+in Reduced Model #3, namely the Mean of the Integrated Profile, and the 
+Mean and Standard Deviation of the DM-SNR Curve. This model with only 
+three predictors likewise achieved high accuracy rates, at approximately 
+97% for both tests, indicating its extreme usefulness in determining the 
+validity of a pulsar candidate. Due to the very long-run time, I was 
+unable to run LOOCV on these models, and in the future, given access to 
+more powerful and efficient computing resources, this would be something 
+I would wish to do for further comparison of these models. I would also 
+be interested in researching whether other metrics measured on the 
+Integrated Profile and DM-SNR Curve could prove more useful in making a 
+model even more accurate than the ones generated here. As long as the 
+accuracy of a model is less than 100%, I believe further improvements can
+be made to improve a model. As in this case, at a ~2% error at a sample 
+size of n=16,648, we will still expect roughly 333 pulsar candidates to 
+be misclassified.

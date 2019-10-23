@@ -1,0 +1,18 @@
+1. Where does the Optimization Equation (9.9-9.11) come from?
+
+2. Can you provide more detail, or a more intuitive explanation, about how C, the tuning parameter from Equation 9.15, and the
+Bias-Variance tradeoff are related?
+
+3. How exactly does including polynomial terms in Eqn. 9.16 cause a non-linear decision boundary to be formed?
+
+4. Why and how does Eqn. 9.23 work correctly?
+
+5. What is an implicit feature space?
+
+6. What is an ROC Curve?
+
+7. For one-versus-one and one-versus-all, what happens if there's a tie between two classes that a point could belong to?
+
+8. Would it be theoretically possible to create or discover an over-arching way to quantify how accurate a method is based on data 
+characteristics? Such as an equation or formula that would take as input the characteristics of the data you want to analyze, and
+have it output an 'accuracy measure' for each method to determine which method should be used on a set of data?

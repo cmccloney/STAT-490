@@ -21,7 +21,7 @@ _I belive it is the set of all potential combinations of the $\mathbf{X}$s (i.e.
 
 6. What is an ROC Curve?
 
-_An ROC curve is a reciever operating characteristic curve that shows the rate of false positives vs. the rate of true positives, and the area under that curve is typically used to assess one measure of performance of a classifier. A perfect classifier would have area = 1 and a random guess would have that equal to 0.5. Check out Section 4.4.3 for more details. We can discuss this on Friday!_
+_An ROC curve is a reciever operating characteristic curve that shows the rate of false positives vs. the rate of true positives, and the area under that curve is typically used to assess one measure of performance of a classifier. A perfect classifier would have area = 1 and a random guess would have that equal to 0.5. Check out Section 4.4.3 for more details (pg. 147). We can discuss this on Friday!_
 
 7. For one-versus-one and one-versus-all, what happens if there's a tie between two classes that a point could belong to? 
 

@@ -3,6 +3,12 @@
 2. Can you provide more detail, or a more intuitive explanation, about how C, the tuning parameter from Equation 9.15, and the
 Bias-Variance tradeoff are related?
 
+Written statement:
+
+The smaller the value of C, the smaller the number of support vectors that are used to define the margin of a hyperplane, and vice versa. As C decreases then, the more variable the estimate of where this margin should be located will be, because there is a smaller number of support vectors it is based off of. Due to having high variance, it will have low bias because the average of these highly variable estimates will be at or close to where the true margin should lie.
+
+Conversely, if C is large, then the margin will be based off of a large number of support vectors, and therefore will be less variable in its estimate of where it should lie. However, because it's less variable, it will rarely move, leading to it potentially having high bias.
+
 3. How exactly does including polynomial terms in Eqn. 9.16 cause a non-linear decision boundary to be formed?
 
 4. Why and how does Eqn. 9.23 work correctly?

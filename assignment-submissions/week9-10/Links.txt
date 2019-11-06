@@ -1,0 +1,9 @@
+A great explanation of the hinge loss function is given by 
+https://jamesmccaffrey.wordpress.com/2018/10/04/hinge-loss-explained-with-a-table-instead-of-a-graph/
+
+Links:
+
+https://towardsdatascience.com/support-vector-machine-introduction-to-machine-learning-algorithms-934a444fca47
+
+https://towardsdatascience.com/support-vector-machines-intuitive-understanding-part-1-3fb049df4ba1
+https://towardsdatascience.com/support-vector-machines-intuitive-understanding-part-2-1046dd449c59

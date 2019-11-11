@@ -1,0 +1,61 @@
+---
+title: "Simulation on Pulsar data"
+author: "Conner McCloney"
+date: "11/10/2019"
+output: pdf_document
+---
+
+Simulating and comparing error rates for $K$-fold Cross Validation, Leave One Out Cross Validation, and Support Vector Classification on the Pulsar
+classification data set. For this dataset, all three methods perform on average almost equivalently.
+
+```{r}
+#k-fold CV at K=10
+suppressMessages(library(boot))
+pulsar <- read.csv("pulsar_stars.csv")
+cv.error.10=rep(0,10)
+for (i in 1:10){
+  glm.fit=glm(target_class~.,data=pulsar)
+  cv.error.10[i]=cv.glm(pulsar,glm.fit,K=10)$delta[1]
+}
+cv.error.10
+```
+
+```{r}
+#Leave One-Out CV
+n <- 200
+true.pulsar.n <- floor((length(pulsar$target_class[pulsar$target_class == 1]) / length(pulsar$target_class)) * n)
+false.pulsar.n <- floor((length(pulsar$target_class[pulsar$target_class == 0]) / length(pulsar$target_class)) * n)
+true.pulsar <- subset(pulsar, pulsar$target_class == 1)
+false.pulsar <- subset(pulsar, pulsar$target_class == 0)
+
+cv.error=rep(0,10)
+for (i in 1:10){
+  true.index <- sample(1:nrow(true.pulsar),true.pulsar.n)
+  false.index <- sample(1:nrow(false.pulsar),false.pulsar.n)
+  #Create new dataset of size n that has same true/false positive proportion
+  #as original dataset
+  new.data <- rbind(true.pulsar[true.index,],false.pulsar[false.index,])
+  glm.fit=glm(target_class~.,data=new.data)
+  cv.error[i]=cv.glm(new.data,glm.fit)$delta[1]
+}
+cv.error
+```
+
+```{r}
+#Support Vector Machine
+for (i in 1:10){
+  true.index <- sample(1:nrow(true.pulsar),true.pulsar.n)
+  false.index <- sample(1:nrow(false.pulsar),false.pulsar.n)
+  #Create new dataset of size n that has same true/false positive proportion
+  #as original dataset
+  new.data <- rbind(true.pulsar[true.index,],false.pulsar[false.index,])
+  new.data$target_class <- factor(new.data$target_class)
+  
+  suppressMessages(library(e1071))
+  tune.out=tune(svm,target_class~., data=new.data, kernel="linear", ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+  bestmodel=tune.out$best.model
+  
+  ypred=predict(bestmodel, pulsar)
+  print(table(predict=ypred, truth=pulsar$target_class))
+}
+```

@@ -8,11 +8,11 @@ bibliography: week-9-10-notes.bib
 
 ### _Support Vector Machine — Introduction to Machine Learning Algorithms_, @Gandhi
 
-Gandhi writes this article as an introduction to the concept of Support Vector Machines (SVMs). 
-SVMs can be used for both regression and classification tasks, and are highly preferred due to 
-the high accuracy produced with
+Gandhi (2018) writes this article as an introduction to the concept of Support Vector Machines (SVMs). 
+SVMs can be used for both regression and classification tasks, and are highly preferred by many relative to other available methods
+due to the high accuracy produced with
 relatively less computational power required. The goal of a Support Vector Machine is to define a 
-decision boundary, or hyperplane, that distinctly classifies data in N-dimensional space, where N 
+decision boundary, or hyperplane, that distinctly classifies data in p-dimensional space, where p 
 is the number of features of the data. 
 Data points that influence the position and orientation of the hyperplane are known as 
 'support vectors', and are used to determine the margin of the classifier. The width of this 
@@ -20,14 +20,15 @@ margin is maximized by minimizing the hinge loss function (another article) plus
 parameter. A partial derivative with respect to each weight, or each beta coefficient, 
 is taken to find the 
 gradient of the SVM's loss function. We then update the gradient via the weight based on correct 
-or incorrect classification.
+or incorrect classification. This gradient update continues until the loss function is minimized,
+but the exact stopping criteria details are not provided.
 
 ### _Support vector machines ( intuitive understanding ) Parts 1,2_, @Kompella
 
-This article serves as an introduction to Support Vector Machines (SVMs), and how their purpose is to linearly seperate data for 
+This article serves as an introduction to Support Vector Machines (SVMs), and how their purpose is to linearly separate data for 
 binary classification. SVMs 
-look to minimize a loss function, which measures the accuracy of a given SVMs classification. An SVM will place a line to split 
-the data, which is known as 
+look to minimize a loss function, which measures the accuracy of a given SVMs classification. An SVM will place a 
+$(p-1)$-dimensional line to split the data, which is known as 
 a hyperplane. The orientation and position of this hyperplane is determined by minimizing a loss function, which measures how 
 well this hyperplane split the 
 data. Examining the loss function, we adjust the weights, which define the hyperplane, and iterate this process with the goal 
@@ -68,5 +69,28 @@ proves that the optimal solution lies within this ball, and every projection ste
 solution. He recommends further 
 research into using SVM for regression, and semi-supervised SVMs for partially labelled data, and that using SGD, such as 
 Pegasos, can be adapted for these purposes for fast and accurate analysis.
+
+### _Fuzzy Support Vector Machines_, @LinEtAl2002
+
+LinEtAl (2002) begins with explaining the idea of Support Vector Machines (SVMs), and a review of theory behind their operation. They then explain 
+that some data points may not be fully assigned to one class, a concept 
+called fuzzy membership, or that certain data points should be attributed 
+to noise and therefore discarded.Since SVMs lack this ability, LinEtAl (2002)
+derive a method called Fuzzy Support Vector Machines (FSVMs) to add in 
+this functionality. Let $s_i$ represent fuzzy membership, or the attitude 
+of the training point $x_i$ toward one class, and $(1-s_i)$ the attitude 
+towards being meaningless, where $0<s_i\leq1$. This allows for some data 
+points to be treated as more important than others when attempting to 
+determine the orientation and location of a hyperplane. Because $s_i$'s 
+are chosen by the researcher, the number of free parameters increases from 
+1, the regularization parameter, to $1 + n$, where n is the number of 
+training points. These values are chosen by making connections between the 
+main property of the dataset and the fuzzy memberships of each point. 
+LinEtAl (2002) then go on to conduct experiments using and testing their newly 
+designed FSVMs, showing that it can be more accurate classifying a portion 
+of the data that is more important, more accurate in regards to only 
+one class, or reducing the effect of outliers. The creation of FSVMs 
+extends the applications of SVMs to account for data particularities to 
+get more specific results, based on the researcher's objectives.
 
 # References

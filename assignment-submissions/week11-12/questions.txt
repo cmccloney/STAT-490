@@ -1,0 +1,15 @@
+1. Could you elaborate on the mechanics behind the process of cost complexity pruning from algorithm 8.1?
+
+2. Will the Gini index or entropy still function well if the proportions are constant for every split, but not near one or zero?
+
+3. Can you break down the terms in equation 8.9?
+
+4. Why and how does each bagged tree only use about 2/3 of the observations?
+
+5. Why is the OOB error equivalent to the LOOCV error?
+
+6. Can you elaborate on the idea behind measuring variable importance in bagging (p. 319)?
+
+7. Can you provide an example of interpreting a model created using boosting, with d = 1?
+
+8. Is it possible to combine random forests and boosting to build a model?

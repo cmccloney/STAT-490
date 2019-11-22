@@ -1,0 +1,29 @@
+1. Could you elaborate on the mechanics behind the process of cost complexity pruning from algorithm 8.1?
+
+_Investigate this algorithm by digging into the `cv.tree` function, and other resources (e.g., Elements of Statistical Learning and library search or google scholar search). Try to comment out the code in the `cv.tree` function to explain each step of the algorithm --- it will likely help to define objects that are taken as arguments in the function with a sample tree and go through loops for a specified index such as, i = 1._
+
+
+2. Will the Gini index or entropy still function well if the proportions are constant for every split, but not near one or zero?
+
+_discussed_
+
+3. Can you break down the terms in equation 8.9?
+
+_discussed_
+
+4. Why and how does each bagged tree only use about 2/3 of the observations?
+
+_discussed_
+
+5. Why is the OOB error equivalent to the LOOCV error? 
+
+_It is not equivalent mathematically, but for large B (large number of bootstrap resamples, fit using the tree-based approach to result in B trees), they will converge to the same value - that is, OOB estimates LOOCV, and for large B, the estimator is unbiased. Conducting LOOCV would be very computationally expensive because you would be leaving an observation our for each bagged tree, that is doing the whole bagging process on each subset of the data where one observation at a time is left out, and then predicting the observation that was left out from the bagged tree.  Because bootstrapping is used in bagging, and data are resampled from the original data frame to get bootstrap resamples, we can expect that about 2/3 of the trees will not include each of the individual observations. That is, about 2/3*B trees will not be fit using observation `i`, so they can be used to test the prediction of the bagged regression tree, meaning there will be 2/3*B predictions for the `i`th response from the bagging process. To get a sense for overall predictive ability of the bagging process, these predictions can be averaged (if response is discrete, proportion of predictions belonging to each class can be computed and the one with the largest value can be used to assign the overall prediction to class k)._
+
+6. Can you elaborate on the idea behind measuring variable importance in bagging (p. 319)?
+
+_The idea that you can measure variable importance is something that I struggle with philosophically. Although regression trees take a non-parametric approach, the split is still determined based on the other available predictors in the data frame, thus, "importance" is measured conditional on the available predictors. The idea they are using in the text is that each tree will come from a different dataset, and will have a slightly different structure, resulting in a slightly different prediction of the new observation. Within each tree the total reduction in RSS for each variable's inclusion in the tree can be calculated (for discrete response G can be used), and then averaged over all of the B trees. The variable that has the largest reduction in error is classified as most "important" for predicting new data, and others are measured relatively based on the largest reduction. This type of blanket statement of importance is a bit inappropriate in my opinion because it is conditional on many things -- the data (variables considered), the number of trees used in the bagging B, the weights given to the trees for averaging (not discussed in the text, so assuming uniform/equal), and the criterion used for assessing improvement to the fit - in this case reduction in RSS was used._ 
+
+7. Can you provide an example of interpreting a model created using boosting, with d = 1?
+
+
+8. Is it possible to combine random forests and boosting to build a model?

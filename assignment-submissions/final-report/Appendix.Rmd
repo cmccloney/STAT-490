@@ -1,0 +1,48 @@
+---
+title: "Appendix"
+author: "Conner McCloney"
+output: word_document
+---
+
+
+```{r, echo=FALSE}
+pulsar_data <- read.csv("pulsar_data.csv")
+set.seed(12052019)
+```
+
+```{r}
+#SVMs
+suppressMessages(library(e1071))
+subset <- pulsar_data[1:1000,]
+pulsar_data$target_class <- as.factor(pulsar_data$target_class)
+subset$target_class <- as.factor(subset$target_class)
+svmfit1=svm(target_class~.,data=subset,kernel="linear",cost=10,scale=FALSE)
+summary(svmfit1)
+ypred1=predict(svmfit1,pulsar_data)
+table(predict=ypred1,pulsar_data$target_class)
+
+svmfit2=svm(target_class~.,data=subset,kernel="radial",gamma=1,cost=1)
+summary(svmfit2)
+ypred2=predict(svmfit2,pulsar_data)
+table(predict=ypred2,pulsar_data$target_class)
+
+cat("Tree-based - Bagging\n")
+suppressMessages(library(randomForest))
+train<-sample(1:nrow(pulsar_data),1000)
+bag=randomForest(target_class~.,data=pulsar_data,subset=train,mtry=8,importance=TRUE)
+bag
+
+cat("Tree-based - RF\n")
+RF=randomForest(target_class~.,data=pulsar_data,subset=train,mtry=4,importance=TRUE)
+RF
+
+cat("Tree-based - Boosting\n")
+suppressMessages(library(gbm))
+Boost=gbm(target_class~.,data=pulsar_data[train,],distribution = "gaussian")
+class(pulsar_data$target_class)
+summary(Boost)
+yhat.boost <- predict(Boost,newdata=pulsar_data[-train,],n.trees=100)
+pulsar_data$target_class <- as.numeric(pulsar_data$target_class)
+boost.test=pulsar_data[-train,"target_class"]
+cat("Error rate: ",mean((yhat.boost-boost.test)^2))
+```
